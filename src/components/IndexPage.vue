@@ -19,14 +19,17 @@ export default {
     const width = +svg.attr('width')
     const height = +svg.attr('height')
 
-    console.log(d3)
+    var zoom = d3.zoom()
+
+    svg.call(zoom)
+    svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity)
 
     var color = d3.scaleOrdinal(d3.schemeCategory20)
 
     const simulation = d3.forceSimulation()
-        .force('link', d3.forceLink().id(function(d) { return d.id }))
-        .force('charge', d3.forceManyBody())
-        .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('link', d3.forceLink().id(function(d) { return d.id }))
+      .force('charge', d3.forceManyBody())
+      .force('center', d3.forceCenter(width / 2, height / 2))
 
     d3.json('/static/miserables.json', function(error, graph) {
       if (error) throw error
@@ -38,7 +41,7 @@ export default {
           .data(graph.links)
           .enter()
             .append('line')
-            .attr('stroke-width', d => d.value * .2)
+            .attr('stroke-width', d => d.value * .3)
 
       const node = svg.append('g')
           .attr('class', 'nodes')
@@ -84,19 +87,21 @@ export default {
           .attr('cx', d => d.x)
           .attr('cy', d => d.y)
 
-        node.selectAll('rect')
-            .attr('x', d => d.x)
-            .attr('y', d => d.y)
+        node
+          .selectAll('rect')
+          .attr('x', d => d.x)
+          .attr('y', d => d.y)
 
-        node.selectAll('text')
-            .attr('x', d => d.x + 22)
-            .attr('y', d => d.y + 15)
-
+        node
+          .selectAll('text')
+          .attr('x', d => d.x + 22)
+          .attr('y', d => d.y + 15)
       }
     })
 
     function dragstarted(d) {
-      if (!d3.event.active) simulation.alphaTarget(0.3).restart()
+      if (!d3.event.active)
+        simulation.alphaTarget(0.3).restart()
       d.fx = d.x
       d.fy = d.y
     }
