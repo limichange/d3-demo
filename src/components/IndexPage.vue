@@ -38,11 +38,11 @@ export default {
           .data(graph.links)
           .enter()
             .append('line')
-            .attr('stroke-width', function(d) { return Math.sqrt(d.value) })
+            .attr('stroke-width', d => d.value * .2)
 
       const node = svg.append('g')
           .attr('class', 'nodes')
-          .selectAll('circle')
+          .selectAll('rect')
           .data(graph.nodes)
           .enter()
             .append('g')
@@ -55,10 +55,9 @@ export default {
 
       d3
         .selectAll('g.node')
-        .append('circle')
-        .attr('r', (d, i) => {
-          return Math.max(d.group * 2, 4)
-        })
+        .append('rect')
+        .attr('width', 20)
+        .attr('height', 20)
         .attr('fill', d => color(d.group))
 
       d3
@@ -85,13 +84,13 @@ export default {
           .attr('cx', d => d.x)
           .attr('cy', d => d.y)
 
-        node.selectAll('circle')
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y)
+        node.selectAll('rect')
+            .attr('x', d => d.x)
+            .attr('y', d => d.y)
 
         node.selectAll('text')
-            .attr('x', d => d.x + 20)
-            .attr('y', d => d.y + 5)
+            .attr('x', d => d.x + 22)
+            .attr('y', d => d.y + 15)
 
       }
     })
@@ -122,7 +121,7 @@ export default {
   stroke-opacity: .9;
 }
 
-.nodes circle {
+.nodes rect {
   stroke: #fff;
   stroke-width: 1.3px;
 }
