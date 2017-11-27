@@ -27,11 +27,11 @@ export default {
     var color = d3.scaleOrdinal(d3.schemeCategory20)
 
     const simulation = d3.forceSimulation()
-      .force('link', d3.forceLink().id(function(d) { return d.id }))
+      .force('link', d3.forceLink().id(function (d) { return d.id }))
       .force('charge', d3.forceManyBody())
       .force('center', d3.forceCenter(width / 2, height / 2))
 
-    d3.json('/static/miserables.json', function(error, graph) {
+    d3.json('/static/miserables.json', function (error, graph) {
       if (error) throw error
 
       const link = svg
@@ -41,7 +41,7 @@ export default {
           .data(graph.links)
           .enter()
             .append('line')
-            .attr('stroke-width', d => d.value * .3)
+            .attr('stroke-width', d => d.value * 0.3)
 
       const node = svg.append('g')
           .attr('class', 'nodes')
@@ -76,7 +76,7 @@ export default {
         .force('link')
         .links(graph.links)
 
-      function ticked() {
+      function ticked () {
         link
           .attr('x1', d => d.source.x)
           .attr('y1', d => d.source.y)
@@ -99,19 +99,20 @@ export default {
       }
     })
 
-    function dragstarted(d) {
-      if (!d3.event.active)
+    function dragstarted (d) {
+      if (!d3.event.active) {
         simulation.alphaTarget(0.3).restart()
+      }
       d.fx = d.x
       d.fy = d.y
     }
 
-    function dragged(d) {
+    function dragged (d) {
       d.fx = d3.event.x
       d.fy = d3.event.y
     }
 
-    function dragended(d) {
+    function dragended (d) {
       if (!d3.event.active) simulation.alphaTarget(0)
       d.fx = null
       d.fy = null
